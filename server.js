@@ -235,15 +235,21 @@ io.on("connection", (socket) => {
     io.to(roomid).emit("sync", code);
   });
 
-  socket.on("draw", ({ offsetX, offsetY, isDrawing, tool, color, roomid }) => {
-    let data = { offsetX, offsetY, isDrawing, tool, color };
-    io.to(roomid).emit("draw", data);
+  // socket.on("draw", ({ offsetX, offsetY, isDrawing, tool, color, roomid }) => {
+  //   let data = { offsetX, offsetY, isDrawing, tool, color };
+  //   io.to(roomid).emit("draw", data);
+  // });
+
+  // socket.on("clear", ({ roomid }) => {
+  //   io.to(roomid).emit("clear", roomid);
+  // });
+  socket.on("draw", (data) => {
+    socket.to(data.roomid).emit("draw", data);
   });
 
-  socket.on("clear", ({ roomid }) => {
-    io.to(roomid).emit("clear", roomid);
+  socket.on("clear", (data) => {
+    socket.to(data.roomid).emit("clear", data);
   });
-
   socket.on("disconnecting", () => {
     const rooms = Array.from(socket.rooms);
     rooms.forEach((roomid) => {
